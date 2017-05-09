@@ -31,10 +31,10 @@ subroutine io_write(tstep,curr)
     if (tstep==0) then
         write (100+rank, '("rank=",i0," size=",i0,"x",i0," offsets=",i0,":",i0," step=",i0)') &
             rank, ndx, ndy, offx, offy, tstep 
-        write (100+rank, '(" time   row   columns ",i0,"...",i0)'), offy, offy+ndy-1  
+        write (100+rank, '(" time   row   columns ",i0,"...",i0)') offy, offy+ndy-1  
         write (100+rank, '("        ",$)') 
         do j=1,ndy
-            write (100+rank, '(i9,$)'), offy+j-1
+            write (100+rank, '(i9,$)') offy+j-1
         enddo
         write (100+rank, '(" ")')
         write (100+rank, '("--------------------------------------------------------------")') 
