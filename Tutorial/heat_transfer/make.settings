@@ -1,7 +1,8 @@
 
 ## Set ADIOS_DIR here or before doing make
-override ADIOS_DIR=/opt/adios/1.11
+#override ADIOS_DIR=/opt/adios/1.11
 #override ADIOS_DIR=/ccs/proj/e2e/${USER}/ADIOS/sith.pgi
+override ADIOS_DIR=$(HOME)/sfw/adios-1.11.0
 
 #Location of the (sequential) HDF5 libraries
 HDF5_DIR=/opt/hdf5-1.8.17
@@ -18,7 +19,7 @@ LINKER=mpicc
 FC=mpif90
 CFLAGS=-g
 LDFLAGS=-g
-FFLAGS=-g -fcheck=bounds #-fcheck=array-temps
+FFLAGS=-g -Wall -fcheck=bounds #-fcheck=array-temps
 
 ## cc/ftn SETTINGS
 #CC=cc
