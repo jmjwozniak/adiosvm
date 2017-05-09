@@ -23,7 +23,6 @@ end subroutine io_finalize
 subroutine io_write(tstep,curr)
     use heat_vars
     implicit none
-    include 'mpif.h'
     integer, intent(in) :: tstep
     integer, intent(in) :: curr
 
