@@ -185,7 +185,6 @@ subroutine iterate(curr)
     use heat_vars
     implicit none
     integer, intent(in) :: curr
-    include 'mpif.h'
     integer :: i,j,k,next
     real*8, parameter :: omega = 0.8;
 
