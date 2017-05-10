@@ -1,0 +1,53 @@
+
+= Heat Transfer: Swift
+
+This example shows how to run the heat transfer ADIOS pipeline from Swift.
+
+== Setup
+
+. http://swift-lang.github.io/swift-t/guide.html#_installation[Install Swift/T]
+. Install the https://bitbucket.org/jmjwozniak/mpix_launch_swift[MPIX_Launch library]
++
+----
+git clone git@bitbucket.org:jmjwozniak/mpix_launch_swift.git
+cd mpix_launch_swift/mpix_launch
+make
+cd ../src
+./build.sh
+----
+. Install EVPath (for Flexpath)
++
+----
+wget http://www.cc.gatech.edu/systems/projects/EVPath/chaos_bootstrap.pl
+./chaos_bootstrap.pl -i
+----
+. Install ADIOS
++
+----
+wget http://users.nccs.gov/~pnorbert/adios-1.11.0.tar.gz
+tar xfz adios-1.11.0.tar.gz
+cd adios-1.11.0
+./configure --prefix=... --with-flexpath=...
+make
+make install
+----
+. Check out Wozniak's fork of the https://github.com/jmjwozniak/adiosvm[ADIOS Tutorials]
++
+----
+git clone git@github.com:jmjwozniak/adiosvm.git
+cd adiosvm/Tutorial/heat_transfer
+----
+. Build the simulator and stager
++
+----
+make adios1
+cd stage_write
+make
+----
+. Enable the +FLEXPATH+ method in +heat_transfer.xml+ (near end of file).
+. Run the https://github.com/jmjwozniak/adiosvm/blob/master/Tutorial/heat_transfer/workflow.swift[workflow]
++
+----
+./run-workflow.sh 20
+----
+where 20 is the number of MPI processes.   As shown in the workflow, 12 processes are used for the simulation and 2 are used for the stager.
