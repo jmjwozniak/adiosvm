@@ -30,6 +30,8 @@ program heat_transfer
                      ! the other half of T is the next step T(t+1)
     real*8  :: tstart, tend
 
+    CHARACTER(len=255) :: tmp
+
     call MPI_Init (ierr)
     ! World comm spans all applications started with the same aprun command 
     ! on a Cray XK6
@@ -53,6 +55,10 @@ program heat_transfer
     call processArgs()
     
     if (rank == 0) then
+        call get_environment_variable("TAU_PROFILE", tmp)
+        write (*,*) "TAU_PROFILE: ", trim(tmp)
+        call get_environment_variable("PROFILEDIR", tmp)
+        write (*,*) "PROFILEDIR:   ", trim(tmp)
         print '(" Process number        : ",i0," x ",i0)', npx,npy
         print '(" Array size per process at first step: ",i0," x ",i0)', ndx,ndy
 
