@@ -11,3 +11,6 @@ query/test_range
 read/heat_print.mod
 read/heat_read_adios
 read/heat_read_steps
+README.html
+*.bp
+fort.*
