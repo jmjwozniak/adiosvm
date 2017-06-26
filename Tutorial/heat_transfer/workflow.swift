@@ -3,10 +3,12 @@ import io;
 import launch;
 import string;
 
+string envs[] = [ "TAU_PROFILE=1", "PROFILEDIR=SOME-DIRECTORY" ];
+
 program1 = "./heat_transfer_adios1";
 arguments1 = split("heat  4 3  40 50  6 500", " ");
 printf("swift: launching: %s", program1);
-exit_code1 = @par=12 launch(program1, arguments1);
+exit_code1 = @par=12 launch_envs(program1, arguments1, envs);
 printf("swift: received exit code: %d", exit_code1);
 if (exit_code1 != 0)
 {
