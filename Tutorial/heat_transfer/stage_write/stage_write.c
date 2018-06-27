@@ -36,6 +36,8 @@ char   wmethodname[16];     // ADIOS write method
 char   wmethodparams[256];  // ADIOS write method
 char   rmethodname[16];     // ADIOS read method
 char   rmethodparams[256];  // ADIOS read method
+char   varnames[256];     // ADIOS variable names
+char   transparams[256];  // ADIOS transform params
 enum ADIOS_READ_METHOD read_method;
 
 static const int max_read_buffer_size  = 1024*1024*1024;
@@ -96,10 +98,12 @@ int processArgs(int argc, char ** argv)
     strncpy(rmethodparams,  argv[4], sizeof(rmethodparams));
     strncpy(wmethodname,    argv[5], sizeof(wmethodname));
     strncpy(wmethodparams,  argv[6], sizeof(wmethodparams));
+    if (argc>7) strncpy(varnames,       argv[7], sizeof(varnames));
+    if (argc>8) strncpy(transparams,    argv[8], sizeof(transparams));
     
     nd = 0;
-    j = 7;
-    while (argc > j && j<13) { // get max 6 dimensions
+    j = 9;
+    while (argc > j && j<15) { // get max 6 dimensions
         errno = 0; 
         decomp_values[nd] = strtol(argv[j], &end, 10); 
         if (errno || (end != 0 && *end != '\0')) { 
@@ -184,6 +188,8 @@ int main (int argc, char ** argv)
     print0("Read method parameters  = \"%s\"\n", rmethodparams);
     print0("Write method            = %s\n", wmethodname);
     print0("Write method parameters = \"%s\"\n", wmethodparams);
+    print0("Variable to transform   = %s\n", varnames);
+    print0("Transform parameters    = \"%s\"\n", transparams);
     
 
     err = adios_read_init_method(read_method, comm, rmethodparams);
@@ -399,7 +405,21 @@ int process_metadata(int step)
                        "gdims=%s  ldims=%s  offs=%s\n", 
                        rank, vpath, vname, gdims, ldims, offs);
 
-                adios_define_var (gh, vname, vpath, v->type, ldims, gdims, offs);
+                int64_t var_id;
+                var_id = adios_define_var (gh, vname, vpath, v->type, ldims, gdims, offs);
+
+                char *varnames_ = strdup(varnames);
+                char* token = strtok (varnames_, ", ");
+                while (token) 
+                {
+                    if (!strcmp (vname, token))
+                    {
+                        print ("rank %d: Set transform: %s\n", rank, token);
+                        adios_set_transform (var_id, transparams);
+                    }
+                    token = strtok (NULL, ", ");
+                }
+                free(varnames_);
             }
             else 
             {
